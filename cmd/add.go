@@ -5,10 +5,10 @@ All Rights Reserved
 package cmd
 
 import (
-	"log"
+	"github.com/charmbracelet/log"
 
+	"github.com/Unquabain/decider/app"
 	"github.com/Unquabain/decider/ui"
-	"github.com/charmbracelet/huh"
 	"github.com/spf13/cobra"
 )
 
@@ -22,31 +22,26 @@ asked to provide the relative priority of this task against a small
 subset of the existing tasks. (The larger the task list, the smaller
 the proportion of tasks you will be asked to rank.)`,
 	Run: func(cmd *cobra.Command, args []string) {
-		var task string
-		task = cmd.Flags().Lookup(`task`).Value.String()
-		if task == `` {
-			input := huh.NewInput().Title(`What is the new task you want to perform?`).Prompt(`> `)
-			if err := input.Run(); err != nil {
-				log.Fatal(err.Error())
-			}
-			task = input.GetValue().(string)
-		}
-		i, err := tasks.Push(task)
+		tasks, err := cliList()
 		if err != nil {
-			log.Fatal(err.Error())
+			log.With(`err`, err).Fatal(`could not get task list`)
 		}
-		d := ui.NewDecider(i)
-		if err := d.Run(); err != nil {
-			log.Fatal(err.Error())
+		app := app.App{
+			UI:   ui.CLI{},
+			List: tasks,
+		}
+		task := cmd.Flags().Lookup(`task`).Value.String()
+		if err := app.Add(task); err != nil {
+			log.With(`err`, err).Fatal(`could not get task list`)
 		}
 		if err := tasks.Save(); err != nil {
-			log.Fatal(err.Error())
+			log.With(`err`, err).Fatal(`could not save task list`)
 		}
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(addCmd)
+	getRootCmd().AddCommand(addCmd)
 
 	// Here you will define your flags and configuration settings.
 

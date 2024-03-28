@@ -6,10 +6,11 @@ package cmd
 
 import (
 	"fmt"
-	"log"
 
+	"github.com/charmbracelet/log"
+
+	"github.com/Unquabain/decider/app"
 	"github.com/Unquabain/decider/ui"
-	"github.com/charmbracelet/huh"
 	"github.com/spf13/cobra"
 )
 
@@ -23,37 +24,28 @@ option to skip this), and then asks you for the relative ranking
 of some subset of the tasks in your list. The larger the task list,
 the smaller the proportion of tasks you'll be asked to compare.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		task, err := tasks.Peek()
+		tasks, err := cliList()
 		if err != nil {
-			log.Fatal(err.Error())
+			log.With(`err`, err).Fatal(`could not get task list`)
 		}
-		confirm := cmd.Flags().Lookup(`silent`).Value.String() == `true`
-		if !confirm {
-			ctl := huh.NewConfirm().Title(task).Description(`Do you want to complete this task?`)
-			if err := ctl.Run(); err != nil {
-				log.Fatal(err.Error())
-			}
-			confirm = ctl.GetValue().(bool)
+		app := app.App{
+			UI:   ui.CLI{},
+			List: tasks,
 		}
-
-		if !confirm {
-			return
-		}
-
-		i, err := tasks.Pop()
-		if err != nil {
-			log.Fatal(err.Error())
-		}
-		d := ui.NewDecider(i)
-		if err := d.Run(); err != nil {
-			log.Fatal(err.Error())
+		silent := cmd.Flags().Lookup(`silent`).Value.String() == `true`
+		if err := app.Complete(!silent); err != nil {
+			log.With(`err`, err).Fatal(`could not complete task`)
 		}
 		if err := tasks.Save(); err != nil {
-			log.Fatal(err.Error())
+			log.With(`err`, err).Fatal(`could not save task list`)
 		}
-		task, err = tasks.Peek()
+		if app.List.Len() == 0 {
+			fmt.Println(`All caught up.`)
+			return
+		}
+		task, err := app.Peek()
 		if err != nil {
-			log.Fatal(err.Error())
+			log.With(`err`, err).Fatal(`could not print task`)
 		}
 		fmt.Println(task)
 
@@ -61,7 +53,7 @@ the smaller the proportion of tasks you'll be asked to compare.`,
 }
 
 func init() {
-	rootCmd.AddCommand(doneCmd)
+	getRootCmd().AddCommand(doneCmd)
 
 	// Here you will define your flags and configuration settings.
 

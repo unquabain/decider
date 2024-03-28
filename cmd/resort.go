@@ -5,8 +5,9 @@ All Rights Reserved
 package cmd
 
 import (
-	"log"
+	"github.com/charmbracelet/log"
 
+	"github.com/Unquabain/decider/app"
 	"github.com/Unquabain/decider/ui"
 	"github.com/spf13/cobra"
 )
@@ -23,40 +24,29 @@ other tasks in the list.
 Optionally, with the -a option, it will re-rank the entire
 list based on your priority responses.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		l := 1
-		if cmd.Flags().Lookup(`all`).Value.String() == `true` {
-			l = tasks.Len()
+		tasks, err := cliList()
+		if err != nil {
+			log.With(`err`, err).Fatal(`could not get task list`)
 		}
-		for i := 0; i < l; i++ {
-			task, err := tasks.Peek()
-			if err != nil {
-				log.Fatal(err.Error())
-			}
-			i, err := tasks.Pop()
-			if err != nil {
-				log.Fatal(err.Error())
-			}
-			err = ui.NewDecider(i).Run()
-			if err != nil {
-				log.Fatal(err.Error())
-			}
-			i, err = tasks.Push(task)
-			if err != nil {
-				log.Fatal(err.Error())
-			}
-			err = ui.NewDecider(i).Run()
-			if err != nil {
-				log.Fatal(err.Error())
-			}
+		app := app.App{
+			UI:   ui.CLI{},
+			List: tasks,
+		}
+		resortMeth := app.Resort
+		if cmd.Flags().Lookup(`all`).Value.String() == `true` {
+			resortMeth = app.ResortAll
+		}
+		if err := resortMeth(); err != nil {
+			log.With(`err`, err).Fatal(`could not re-sort task list`)
 		}
 		if err := tasks.Save(); err != nil {
-			log.Fatal(err.Error())
+			log.With(`err`, err).Fatal(`could not save task list`)
 		}
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(resortCmd)
+	getRootCmd().AddCommand(resortCmd)
 
 	// Here you will define your flags and configuration settings.
 

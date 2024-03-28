@@ -5,8 +5,9 @@ All Rights Reserved
 package cmd
 
 import (
-	"fmt"
-
+	"github.com/Unquabain/decider/app"
+	"github.com/Unquabain/decider/ui"
+	"github.com/charmbracelet/log"
 	"github.com/spf13/cobra"
 )
 
@@ -20,14 +21,22 @@ Task 0 is the next task to do, and the tasks descend in
 urgency generally. But there is not guaranteed to be
 any strict internal ranking past 0.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		for i, task := range tasks.Tasks() {
-			fmt.Printf("% 2d: %s\n", i, task)
+		tasks, err := cliList()
+		if err != nil {
+			log.With(`err`, err).Fatal(`could not get task list`)
+		}
+		app := app.App{
+			UI:   ui.CLI{},
+			List: tasks,
+		}
+		if err := app.ShowList(); err != nil {
+			log.With(`err`, err).Fatal(`could not show task list`)
 		}
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(listCmd)
+	getRootCmd().AddCommand(listCmd)
 
 	// Here you will define your flags and configuration settings.
 

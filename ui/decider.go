@@ -5,13 +5,13 @@ import (
 	"github.com/charmbracelet/huh"
 )
 
-type Decider struct {
+type CLIDecider struct {
 	s *huh.Select[int]
 	i list.Iterator
 }
 
-func NewDecider(i list.Iterator) *Decider {
-	return &Decider{
+func NewCLIDecider(i list.Iterator) *CLIDecider {
+	return &CLIDecider{
 		i: i,
 		s: huh.NewSelect[int]().
 			Title(`Select the most urgent of these tasks.`).
@@ -19,7 +19,7 @@ func NewDecider(i list.Iterator) *Decider {
 	}
 }
 
-func (d *Decider) Run() error {
+func (d *CLIDecider) Run() error {
 	for d.i != nil {
 		options := make([]huh.Option[int], 0, 3)
 		for idx, task := range d.i.Tasks() {
