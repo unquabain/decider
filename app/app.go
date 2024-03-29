@@ -79,10 +79,11 @@ func (a App) Resort() error {
 }
 
 func (a App) ResortAll() error {
-	l := a.List.Len()
-	for i := 0; i < l; i++ {
-		if err := a.Resort(); err != nil {
-			return err
+	tasks := a.List.Tasks()
+	a.List = list.NewFromList(nil)
+	for _, task := range tasks {
+		if err := a.Add(task); err != nil {
+			return fmt.Errorf(`could not resort all tasks: %w`, err)
 		}
 	}
 	return nil
