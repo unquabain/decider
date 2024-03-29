@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: decider
+  labels:
+    app.kubernetes.io/name: {{ .Release.Name }}-decider
+    app.kubernetes.io/component: service
+spec:
+  selector:
+    app.kubernetes.io/name: decider
+    app.kubernetes.io/component: pod
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8899

@@ -1,0 +1,5 @@
+replicas: 1
+image:
+  registry: ""
+  repo: unquabain/decider
+  tag: latest

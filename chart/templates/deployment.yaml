@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: decider
+  labels:
+    app.kubernetes.io/name: {{ .Release.Name }}-decider
+    app.kubernetes.io/component: server
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: decider
+      app.kubernetes.io/name: decider
+      app.kubernetes.io/component: pod
+  template:
+    metadata:
+      labels:
+        app: decider
+        app.kubernetes.io/name: decider
+        app.kubernetes.io/component: pod
+    spec:
+      containers:
+        - name: server
+          imagePullPolicy: Always
+          image: {{ with .Values.image }}{{ if .registry }}{{ .registry }}/{{ end }}{{ .repo }}:{{ .tag }}{{ end }}
+          ports:
+            - containerPort: 8899
+
+
+  

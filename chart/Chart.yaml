@@ -1,0 +1,5 @@
+apiVersion: v2
+name: decider
+description: A simple, heap-sorted TODO list
+version: 0.0.5
+appVersion: 0.0.1
