@@ -1,5 +1,8 @@
+//go:build !wasm
+// +build !wasm
+
 /*
-Copyright © 2024 Mobile Technologies Inc. <connect-support@mtigs.com>
+Copyright © 2024 Ben C. Forsberg <benfrsbrg@gmail.com>
 All Rights Reserved
 */
 package main

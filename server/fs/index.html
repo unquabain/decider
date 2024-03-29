@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8"/>
+    <link rel="stylesheet" href="main.css">
+		<script src="lib/wasm_exec.js"></script>
+		<script>
+			const go = new Go();
+			WebAssembly.instantiateStreaming(fetch("lib/decider.wasm"), go.importObject).then((result) => {
+				go.run(result.instance);
+			});
+		</script>
+	</head>
+	<body>
+    <div id="content"><div id="instructions">
+      <div id="header">
+
+        <h1 title="Next Up" id="current-task"></h1>
+      </div>
+      <div id="nav">
+        <div class="button-group">
+          <button type="button" id="nav-complete" title="Complete Task">&#xE2E6;</button>
+          <button type="button" id="nav-add" title="Add Task">&#xE148;</button>
+          <button type="button" id="nav-resort" title="Defer Task">&#xE7F8;</button>
+          <button type="button" id="nav-resort-all" title="Re-Sort All Tasks">&#xE8D5;</button>
+          <button type="button" id="nav-list-all" title="List All Tasks">&#xE896;</button>
+          <button type="button" id="nav-show-instructions" onclick="location.href=&quot;/#instructions&quot;" title="Show Instructions">&#xE8FD;</button>
+          <button type="button" id="nav-hide-instructions" onclick="location.href=&quot;/&quot;" title="Hide Instructions">&#xE8FD;</button>
+        </div>
+      </div>
+      <div id="form">
+        <div class="ui" id="prompt">
+          <form>
+            <label for="prompt-input"></label>
+            <input type="text" name="prompt" id="prompt-input"/>
+            <button type="button" id="prompt-enter">Enter</button>
+          </form>
+        </div>
+        <div class="ui" id="confirm">
+          <form>
+            <h2 id="confirm-prompt"></h2>
+            <h3 id="confirm-task"></h3>
+            <div class="button-group">
+              <button type="button" id="btn-yes">Yes</button>
+              <button type="button" id="btn-no">No</button>
+            </div>
+          </form>
+        </div>
+        <div class="ui" id="decide">
+          <h2 id="decide-prompt">Which of these tasks has the greatest urgency?</h2>
+            <div class="button-group">
+              <button type="button" id="btn-task-0"></button>
+              <button type="button" id="btn-task-1"></button>
+              <button type="button" id="btn-task-2"></button>
+            </div>
+        </div>
+        <div class="ui" id="list">
+          <ul></ul>
+        </div>
+      </div>
+      <div id="instruction-text">
+        <h2>A simple, sorted to-do list.</h2>
+        <p>This to-do list shows you one item at a time: the most urgent thing you have to do.
+           It uses a priority queue algorithm to figure that out. Whenever you make a change
+           to the list (e.g. <span class="icon">&#xE2E6;</span> <strong>Complete</strong> a task),
+           you'll be asked some questions about the relative urgency of some other tasks.</p>
+        <p><strong>Next up</strong> is your highest-priority task, shown in bold at the top.</p>
+        <p><span class="icon">&#xE2E6;</span> <strong>Complete Task</strong> removes the top
+           task from your queue and figures out what the next task will be. You'll be asked
+           to rank some other tasks, perhaps ones further down your list. There shouldn't
+           be too many.</p>
+        <p><span class="icon">&#xE148;</span> <strong>Add Task</strong> is where you enter
+           a new task for your list. You'll be asked a few questions to figure out it's
+           approximate urgency. Not too many.</p>
+        <p><span class="icon">&#xE7F8;</span> <strong>Defer Task</strong> pushes the current
+           task back on the list. Sometimes priorities change, or you just can't do that
+           one thing right now. Basically, it marks it completed and then re-adds it to
+           the list. You'll be asked a few questions about its new urgency.</p>
+        <p><span class="icon">&#xE896;</span> <strong>Re-Sort All Tasks</strong> Sometimes
+           your priorities change a lot. Or maybe the list has gotten out of whack.
+           This will ask you to re-rank all your tasks relative to one another.</p>
+        <p><span class="icon">&#xE8FD;</span> <strong>Show/Hide Instructions</strong>
+           You've already figured out what that button does.</p>
+      </div>
+    </div></div>
+		<script src="main.js"></script>
+  </body>
+</html>

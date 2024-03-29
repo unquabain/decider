@@ -1,0 +1,127 @@
+@font-face {
+  font-family: Lato;
+  src: url(fonts/lato-regular.ttf);
+}
+@font-face {
+  font-family: Lato;
+  src: url(fonts/lato-bold.ttf);
+  font-weight: bold;
+}
+@font-face {
+  font-family: Lato;
+  src: url(fonts/lato-italic.ttf);
+  font-style: italic;
+}
+@font-face {
+  font-family: Lato;
+  src: url(fonts/lato-bolditalic.ttf);
+  font-style: italic;
+  font-style: italic;
+}
+@font-face {
+  font-family: icon;
+  src: url(fonts/material.ttf);
+}
+
+
+* {
+  font-family: Lato, sans-serif;
+  color: #564256;
+}
+
+body {
+  background-color: #564256;
+}
+
+div#content {
+  width: 900px;
+  margin: 0 auto;
+  background-color: #96939B;
+  padding: 2em;
+}
+h2, h1 {
+  text-shadow: 0 1px 0.5px #564256, 255, 255, 0.6), 0 -0.5px 1px #E8E8E8;
+}
+
+#current-task {
+  background-color: #FC814A;
+  text-align: center;
+  padding: 5pt;
+}
+
+#form .ui {
+  background-color: #BFBFBF;
+  padding: 1em;
+  margin: 1em 0;
+}
+
+#form h2 {
+  text-shadow: none;
+}
+
+input {
+  width: 100%;
+  font-size: large;
+  padding: 0.5ex;
+  margin: 1ex 0;
+}
+
+#nav .button-group {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.icon {
+  font-family: icon;
+  display: inline-block;
+}
+
+#nav button {
+  font-family: icon;
+  min-width: 0;
+  width: 1.5em;
+  height: 1.5em;
+  background: inherit;
+  border: none;
+  font-size: 24pt;
+  color: #E8E8E8;
+  text-decoration: none;
+  text-align: center;
+  vertical-align: middle;
+}
+
+#nav button:hover {
+  background-color: #FC814A;
+}
+
+button {
+  min-width: 175px;
+}
+
+#decide .button-group button {
+    width: 100%;
+    margin: 1ex 0;
+}
+
+p {
+  font-size: small;
+}
+
+#nav-hide-instructions {
+  display: none;
+}
+
+#instruction-text {
+  display: none;
+}
+
+#instructions:target #nav-hide-instructions {
+  display: block;
+}
+#instructions:target #instruction-text{
+  display: block;
+}
+#instructions:target #nav-show-instructions {
+  display: none;
+}

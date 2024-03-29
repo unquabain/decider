@@ -8,6 +8,8 @@ import (
 	"os"
 )
 
+var ErrCaughtUp = errors.New(`all caught up`)
+
 type Model struct {
 	Filename string
 	tasks    []string
@@ -17,6 +19,12 @@ func New(filename string) *Model {
 	return &Model{
 		Filename: filename,
 		tasks:    nil,
+	}
+}
+
+func NewFromList(tasks []string) *Model {
+	return &Model{
+		tasks: tasks,
 	}
 }
 
@@ -83,14 +91,14 @@ func (m *Model) Swap(i, j int) error {
 
 func (m *Model) Peek() (string, error) {
 	if m.Len() == 0 {
-		return ``, fmt.Errorf(`no tasks to do`)
+		return ``, ErrCaughtUp
 	}
 	return m.tasks[0], nil
 }
 
 func (m *Model) Pop() (Iterator, error) {
 	if m.Len() == 0 {
-		return nil, fmt.Errorf(`no tasks to complete`)
+		return nil, ErrCaughtUp
 	}
 	if m.Len() == 1 {
 		m.tasks = nil
