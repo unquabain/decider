@@ -50,8 +50,8 @@ tasks:
     deps:
       - docker-push
     cmds:
-      - kubectl --context do scale deployment --replicas=0
-      - kubectl --context do scale deployment --replicas=1
+      - kubectl --context do scale deployment/decider --replicas=0
+      - kubectl --context do scale deployment/decider --replicas=1
 
 
 
