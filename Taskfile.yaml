@@ -1,0 +1,58 @@
+version: "3"
+vars:
+  TAG:
+    sh: date +%FT%H
+tasks:
+  generate:
+    sources:
+      - wasm.go
+      - wasm/*.go
+      - app/*.go
+      - list/model.go
+      - generate.go
+    generates:
+      - server/fs/lib/decider.wasm
+      - server/fs/lib/wasm_exec.js
+    cmd: go generate
+  tidy:
+    cmd: go mod tidy
+  build:
+    sources:
+      - "*.go"
+      - "**/*.go"
+    generates:
+      - decider
+    deps:
+      - generate
+      - tidy
+    cmd: go build
+  build-server:
+    sources:
+      - "*.go"
+      - "**/*.go"
+    generates:
+      - decider
+    deps:
+      - generate
+      - tidy
+    cmd: go build --tags server
+  docker-build:
+    status:
+      - docker image inspect unquabain/decider:{{ .TAG }}
+    cmd: docker build --platform linux/amd64 -t unquabain/decider:{{ .TAG }} -t unquabain/decider:latest .
+  docker-push:
+    deps:
+      - docker-build
+    cmds:
+      - docker push unquabain/decider:{{ .TAG }}
+      - docker push unquabain/decider:latest
+  deploy:
+    deps:
+      - docker-push
+    cmds:
+      - kubectl --context do scale deployment --replicas=0
+      - kubectl --context do scale deployment --replicas=1
+
+
+
+

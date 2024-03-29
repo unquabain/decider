@@ -2,11 +2,11 @@
 <html>
 	<head>
 		<meta charset="utf-8"/>
-    <link rel="stylesheet" href="main.css">
-		<script src="lib/wasm_exec.js"></script>
+    <link rel="stylesheet" href="main.css?cachehash=CACHEHASH">
+		<script src="lib/wasm_exec.js?cachehash=CACHEHASH"></script>
 		<script>
 			const go = new Go();
-			WebAssembly.instantiateStreaming(fetch("lib/decider.wasm"), go.importObject).then((result) => {
+			WebAssembly.instantiateStreaming(fetch("lib/decider.wasm?cachehash=CACHEHASH"), go.importObject).then((result) => {
 				go.run(result.instance);
 			});
 		</script>

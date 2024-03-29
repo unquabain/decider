@@ -1,5 +1,5 @@
-//go:build !wasm
-// +build !wasm
+//go:build server
+// +build server
 
 /*
 Copyright © 2024 Ben C. Forsberg <benfrsbrg@gmail.com>

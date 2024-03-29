@@ -1,26 +1,26 @@
 @font-face {
   font-family: Lato;
-  src: url(fonts/lato-regular.ttf);
+  src: url(fonts/lato-regular.ttf?cachehash=CACHEHASH);
 }
 @font-face {
   font-family: Lato;
-  src: url(fonts/lato-bold.ttf);
+  src: url(fonts/lato-bold.ttf?cachehash=CACHEHASH);
   font-weight: bold;
 }
 @font-face {
   font-family: Lato;
-  src: url(fonts/lato-italic.ttf);
+  src: url(fonts/lato-italic.ttf?cachehash=CACHEHASH);
   font-style: italic;
 }
 @font-face {
   font-family: Lato;
-  src: url(fonts/lato-bolditalic.ttf);
+  src: url(fonts/lato-bolditalic.ttf?cachehash=CACHEHASH);
   font-style: italic;
   font-style: italic;
 }
 @font-face {
   font-family: icon;
-  src: url(fonts/material.ttf);
+  src: url(fonts/material.ttf?cachehash=CACHEHASH);
 }
 
 

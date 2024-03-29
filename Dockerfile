@@ -6,7 +6,7 @@ WORKDIR /build
 COPY . /build
 RUN go mod tidy
 RUN go generate
-RUN go build
+RUN go build --tags server
 
 FROM scratch
 
